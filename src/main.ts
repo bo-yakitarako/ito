@@ -6,16 +6,11 @@ import { buttonInteraction } from './components/buttons';
 config();
 
 const client = new Client({
-  intents: [
-    GatewayIntentBits.Guilds,
-    GatewayIntentBits.MessageContent,
-    GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.GuildMembers,
-  ],
+  intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
 });
 
 client.once(Events.ClientReady, () => {
-  console.log('すかき～ん');
+  console.log('伊東ではなかった模様です');
 });
 
 client.on(Events.InteractionCreate, async (interaction) => {
