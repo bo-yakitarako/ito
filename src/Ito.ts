@@ -90,9 +90,10 @@ export class Ito {
     this.status = 'playing';
     this.gameCount += 1;
     this.dealNumbers();
-    await interaction.reply({ components: [makeButtonRow('completeSubmit')], flags });
+    let components = [makeButtonRow('completeSubmit', 'resetSubmit')];
+    await interaction.reply({ components, flags });
     const embeds = [this.buildThemeEmbed(this.themes.pop()!)];
-    const components = [makeButtonRow('displayCard', 'submit')];
+    components = [makeButtonRow('displayCard', 'submit')];
     await (interaction.channel as TextChannel)?.send({ embeds, components });
   }
 
@@ -159,8 +160,8 @@ export class Ito {
     this.status = 'result';
     const order = Object.keys(this.submitted)
       .map((id) => this.attendees.find((p) => p.id === id)!)
-      .map(({ name, number }) => `**${number}**(${name}っち)`)
-      .join(' → ');
+      .map(({ name, number }) => `**${number}** (${name}っち)`)
+      .join('\n');
     const isSuccess = this.judge();
     const title = isSuccess ? '成功 :laughing:' : '失敗 :cry:';
     const color = isSuccess ? 'success' : 'failure';
@@ -177,6 +178,15 @@ export class Ito {
 
   private judge() {
     return Object.values(this.submitted).every((num, i, arr) => i === 0 || num > arr[i - 1]);
+  }
+
+  public async resetSubmit(interaction: ButtonInteraction) {
+    if (!(await this.checkStatus(interaction, 'playing'))) {
+      return;
+    }
+    this.submitted = {};
+    await interaction.deferUpdate();
+    await (interaction.channel as TextChannel)?.send('出てたカードをリセットしたよ。出直してこ');
   }
 
   public async finish(interaction: RepliableInteraction, hasCheck = true) {

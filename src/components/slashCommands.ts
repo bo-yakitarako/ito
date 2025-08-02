@@ -10,8 +10,8 @@ import { makeButtonRow } from '../utils';
 const flags = MessageFlags.Ephemeral;
 
 const registration = {
-  launch: {
-    data: new SlashCommandBuilder().setName('launch').setDescription('伊東ではありません'),
+  ito: {
+    data: new SlashCommandBuilder().setName('ito').setDescription('伊東ではありません'),
     execute: async (interaction: ChatInputCommandInteraction) => {
       game.create(interaction);
       let content = '人が集まったらバージョン選んではじめてこ';
@@ -23,7 +23,7 @@ const registration = {
     },
   },
   reset: {
-    data: new SlashCommandBuilder().setName('reset').setDescription('ゲームをリセットして終了する'),
+    data: new SlashCommandBuilder().setName('reset').setDescription('もう伊東は用済みだね'),
     execute: async (interaction: ChatInputCommandInteraction) => {
       const ito = game.get(interaction);
       if (ito !== null) {

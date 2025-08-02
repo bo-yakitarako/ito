@@ -45,6 +45,15 @@ const registration = {
       await ito.completeSubmit(interaction);
     },
   },
+  resetSubmit: {
+    component: new ButtonBuilder()
+      .setCustomId('resetSubmit')
+      .setLabel('カードを出し直す')
+      .setStyle(ButtonStyle.Secondary),
+    async execute(interaction: ButtonInteraction, ito: Ito) {
+      await ito.resetSubmit(interaction);
+    },
+  },
   next: {
     component: new ButtonBuilder()
       .setCustomId('next')
@@ -91,7 +100,7 @@ export const button = Object.fromEntries(
 export const buttonInteraction = async (interaction: ButtonInteraction) => {
   const ito = game.get(interaction);
   if (ito === null) {
-    await interaction.reply({ content: '`/launch`しようね', flags });
+    await interaction.reply({ content: '`/ito`しようね', flags });
     return;
   }
   const customId = interaction.customId as CustomId;
