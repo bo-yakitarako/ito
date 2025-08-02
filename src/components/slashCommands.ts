@@ -5,6 +5,7 @@ import {
   TextChannel,
 } from 'discord.js';
 import { game } from '../Ito';
+import { makeButtonRow } from '../utils';
 
 const flags = MessageFlags.Ephemeral;
 
@@ -13,14 +14,23 @@ const registration = {
     data: new SlashCommandBuilder().setName('launch').setDescription('伊東ではありません'),
     execute: async (interaction: ChatInputCommandInteraction) => {
       game.create(interaction);
-      await interaction.reply({ content: '伊東ではありません', flags });
+      let content = '人が集まったらバージョン選んではじめてこ';
+      let components = [makeButtonRow('standard', 'rainbow', 'classic', 'all')];
+      await interaction.reply({ content, components, flags });
+      content = 'アイコンは魚のイトウだけどこのゲームのモチーフは蜘蛛の糸です';
+      components = [makeButtonRow('join')];
+      await (interaction.channel as TextChannel)?.send({ content, components });
     },
   },
   reset: {
     data: new SlashCommandBuilder().setName('reset').setDescription('ゲームをリセットして終了する'),
     execute: async (interaction: ChatInputCommandInteraction) => {
-      await interaction.reply({ content: '今までありがとう。君のことはきっと忘れない...', flags });
+      const ito = game.get(interaction);
+      if (ito !== null) {
+        await ito.finish(interaction, false);
+      }
       game.remove(interaction);
+      await interaction.reply({ content: '今までありがとう。君のことはきっと忘れない...', flags });
     },
   },
 };

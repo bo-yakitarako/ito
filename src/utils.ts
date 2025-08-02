@@ -18,25 +18,42 @@ export const makeButtonRow = (...buttonKeys: ButtonKey[]) => {
   return new ActionRowBuilder<ButtonBuilder>().addComponents(buttons);
 };
 
-const color = 0xe8d44f;
+const colors = {
+  info: 0xe8d44f,
+  success: 0x53fc94,
+  failure: 0xff5757,
+};
 
+type ColorKey = keyof typeof colors;
+type DescriptionParams = [string] | [string, ColorKey];
+type FieldsParams = [EmbedField[]] | [EmbedField[], ColorKey];
+type AllParams = [string, EmbedField[]] | [string, EmbedField[], ColorKey];
 export const buildEmbed = (
   title: string,
-  ...params: [string] | [EmbedField[]] | [string, EmbedField[]]
+  ...params: DescriptionParams | FieldsParams | AllParams
 ) => {
   let description = '';
   let fields: EmbedField[] = [];
-  if (typeof params[0] === 'string') {
+  let color: ColorKey = 'info';
+  if (params[0] instanceof Array) {
+    fields = params[0];
+    if (typeof params[1] === 'string') {
+      color = params[1];
+    }
+  } else {
     description = params[0];
     if (params[1] instanceof Array) {
       fields = params[1];
+      if (typeof params[2] === 'string') {
+        color = params[2];
+      }
+    } else if (typeof params[1] === 'string') {
+      color = params[1];
     }
-  } else {
-    fields = params[0];
   }
   const embed = new EmbedBuilder();
   embed.setTitle(title);
-  embed.setColor(color);
+  embed.setColor(colors[color]);
   if (description) {
     embed.setDescription(description);
   }
