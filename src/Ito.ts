@@ -90,11 +90,11 @@ export class Ito {
     this.status = 'playing';
     this.gameCount += 1;
     this.dealNumbers();
-    let components = [makeButtonRow('completeSubmit', 'resetSubmit')];
-    await interaction.reply({ components, flags });
     const embeds = [this.buildThemeEmbed(this.themes.pop()!)];
-    components = [makeButtonRow('displayCard', 'submit')];
+    let components = [makeButtonRow('displayCard', 'submit')];
     await (interaction.channel as TextChannel)?.send({ embeds, components });
+    components = [makeButtonRow('completeSubmit', 'resetSubmit')];
+    await interaction.reply({ components, flags });
   }
 
   private dealNumbers() {
