@@ -28,10 +28,18 @@ type ColorKey = keyof typeof colors;
 type DescriptionParams = [string] | [string, ColorKey];
 type FieldsParams = [EmbedField[]] | [EmbedField[], ColorKey];
 type AllParams = [string, EmbedField[]] | [string, EmbedField[], ColorKey];
-export const buildEmbed = (
+export function buildEmbed(title: string, description: string): EmbedBuilder;
+export function buildEmbed(title: string, description: string, color: ColorKey): EmbedBuilder;
+export function buildEmbed(title: string, fields: EmbedField[]): EmbedBuilder;
+export function buildEmbed(title: string, fields: EmbedField[], color: ColorKey): EmbedBuilder;
+export function buildEmbed(title: string, description: string, fields: EmbedField[]): EmbedBuilder;
+export function buildEmbed(
   title: string,
-  ...params: DescriptionParams | FieldsParams | AllParams
-) => {
+  description: string,
+  fields: EmbedField[],
+  color: ColorKey,
+): EmbedBuilder;
+export function buildEmbed(title: string, ...params: DescriptionParams | FieldsParams | AllParams) {
   let description = '';
   let fields: EmbedField[] = [];
   let color: ColorKey = 'info';
@@ -61,4 +69,4 @@ export const buildEmbed = (
     embed.addFields(fields);
   }
   return embed;
-};
+}
